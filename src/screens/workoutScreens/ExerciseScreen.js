@@ -1,27 +1,25 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../../theme';
+import { Checkbox } from '../../components/Checkbox';
+import { CompleteButton } from '../../components/CompleteButton';
 
 export const ExerciseScreen = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Подтягивания с полотенцем",
+      headerTitle: "Отжимания",
     })
   }, [])
 
   return (
     <View style={styles.exerciseContainer}>
-      <View style={{...styles.exerciseExample, height: 250}}>
-        <Text>Тут будет 3D анимация как выполнять упражнение, её можно будет выбрать из списка доступных</Text>
+      <View style={{...styles.exerciseExample, height: 220}}>
+        {/* <Text>Тут будет 3D анимация как выполнять упражнение, её можно будет выбрать  из списка доступных</Text> */}
+        <Image source={require("../../../assets/gifs/push-ups.gif")} style={styles.gif}/>
       </View>
 
       <View style={styles.exerciseInfo}>
-        <View style={styles.exerciseInfoWrapper}>
-          <Text style={styles.exerciseInfoNum}>3</Text>
-          <Text style={styles.exerciseInfoText}>Подхода</Text>
-          {/* Подходы переводиться как Sets, на всякий случай) */}
-        </View>
         <View style={styles.exerciseInfoWrapper}>
           <Text style={styles.exerciseInfoNum}>12</Text>
           <Text style={styles.exerciseInfoText}>Повторений</Text>
@@ -35,21 +33,19 @@ export const ExerciseScreen = ({ navigation }) => {
       <View style={styles.exerciseSetsWrapper}>
         <View style={styles.exerciseSet}>
           <Text style={styles.exerciseSetText}>1 подход</Text>
-          <Ionicons name="md-checkmark-circle-sharp" size={26} color="white" />
+          <Checkbox />
         </View>
         <View style={styles.exerciseSet}>
           <Text style={styles.exerciseSetText}>2 подход</Text>
-          <Ionicons name="ellipse-outline" size={26} color="white" />
+          <Checkbox />
         </View>
         <View style={styles.exerciseSet}>
           <Text style={styles.exerciseSetText}>3 подход</Text>
-          <Ionicons name="ellipse-outline" size={26} color="white" />
+          <Checkbox />
         </View>
       </View>
 
-      <View style={styles.exerciseDone}>
-        <Text style={styles.exerciseDoneText}>Завершить упражнение</Text>
-      </View>
+      <CompleteButton navigation={navigation} buttonText="Завершить упражнение" />
     </View>
   );
 }
@@ -58,16 +54,19 @@ const styles = StyleSheet.create({
   exerciseContainer: {
     flex: 1,
     backgroundColor: 'black',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    paddingTop: 10
   },
   exerciseExample: theme.CARD_STYLE,
 
   exerciseInfo: {
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, .5)',
+    // borderColor: 'rgba(255, 255, 255, .5)',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    paddingTop: 10,
+    marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around'
@@ -116,5 +115,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "black",
     fontWeight: 'bold'
+  },
+
+  gif: {
+    flex:1,
+    width:"100%",
+    height:"100%",
+    justifyContent:"center",
+    alignItems:"center",
+    backgroundColor:'#000',
   }
 })

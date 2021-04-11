@@ -1,6 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { 
+  createStackNavigator,
+  TransitionPresets,
+  CardStyleInterpolators 
+} from '@react-navigation/stack';
 import { HomeScreen } from '../screens/HomeScreen';
 import { StatusBar } from 'react-native';
 import { WorkoutScreen } from '../screens/workoutScreens/WorkoutScreen';
@@ -13,11 +17,16 @@ export const MainNavigation = () => {
     return (
       <Stack.Navigator screenOptions={{
         headerTintColor: 'white',
+        headerBackTitle: 'Назад',
+
         headerStyle: {
-        backgroundColor: 'black',
-        shadowColor: 'transparent',
-        elevation: 0
-      }
+          backgroundColor: 'black',
+          shadowColor: 'transparent',
+          elevation: 0,
+        },
+
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        ...TransitionPresets.SlideFromRightIOS,
       }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         {/* Тут можно сделать лучше навигацию, в будущем с BottomTabs будет понятней как именно */}

@@ -5,14 +5,14 @@ import { WorkoutCard } from '../components/WorkoutCard';
 export const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Workouts",
+      headerTitle: "Мои тренировки",
     })
   }, [])
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <WorkoutCard onPress={() => navigation.navigate("Workout")} cardName="Тренировка спины"/>
-    </SafeAreaView>
+    <View style={styles.mainContainer}>
+      <WorkoutCard onPress={() => navigation.navigate("Workout")} cardName="Тренировка на грудь"/>
+    </View>
   );
 }
 
