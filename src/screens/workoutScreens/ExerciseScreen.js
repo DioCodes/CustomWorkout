@@ -1,51 +1,73 @@
-import React, { useLayoutEffect } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../../theme';
 import { Checkbox } from '../../components/Checkbox';
 import { CompleteButton } from '../../components/CompleteButton';
 
-export const ExerciseScreen = ({ navigation }) => {
+export const ExerciseScreen = ({ route, navigation }) => {
+  const { exerciseTitle, exerciseGifExample, exerciseSets, exerciseReps, exerciseRestInSec } = route.params;
+  const [exerciseSetsCards, setExerciseSetsCards] = useState([]);
+  
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Отжимания",
+      headerTitle: exerciseTitle,
     })
+
+    createSets();
   }, [])
+  
+  let sets = [];
+  const createSets = () => {
+    for (let i = 1; i <= exerciseSets; i++) {
+      sets.push({setNumber: i})
+    }
+    setExerciseSetsCards(sets)
+  }
+
+  const ExerciseSetCard = ({ number }) => {
+    return (
+      <View style={styles.exerciseSet}>
+        <Text style={styles.exerciseSetText}>{number} подход</Text>
+        <Checkbox />
+      </View>
+    )
+  }
+
+  const renderItem = ({ item }) => (
+    <ExerciseSetCard number={item.setNumber}/>
+  );
 
   return (
     <View style={styles.exerciseContainer}>
-      <View style={{...styles.exerciseExample, height: 220}}>
+      <View style={styles.exerciseExample}>
         {/* <Text>Тут будет 3D анимация как выполнять упражнение, её можно будет выбрать  из списка доступных</Text> */}
-        <Image source={require("../../../assets/gifs/push-ups.gif")} style={styles.gif}/>
+        <Image source={{ uri: exerciseGifExample }} style={styles.gif}/>
       </View>
 
-      <View style={styles.exerciseInfo}>
-        <View style={styles.exerciseInfoWrapper}>
-          <Text style={styles.exerciseInfoNum}>12</Text>
-          <Text style={styles.exerciseInfoText}>Повторений</Text>
-        </View>
-        <View style={styles.exerciseInfoWrapper}>
-          <Text style={styles.exerciseInfoNum}>120</Text>
-          <Text style={styles.exerciseInfoText}>Отдых(сек)</Text>
-        </View>
-      </View>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <View style={styles.exerciseInfo}>
+              <View style={styles.exerciseInfoWrapper}>
+                <Text style={styles.exerciseInfoNum}>{exerciseReps}</Text>
+                <Text style={styles.exerciseInfoText}>Повторений</Text>
+              </View>
+              <View style={styles.exerciseInfoWrapper}>
+                <Text style={styles.exerciseInfoNum}>{exerciseRestInSec}</Text>
+                <Text style={styles.exerciseInfoText}>Отдых(сек)</Text>
+              </View>
+            </View>
+          </>
+        }
+        data={exerciseSetsCards}
+        renderItem={renderItem}
+        keyExtractor={(_, index) => {
+          return index.toString();
+        }}
+      />
 
-      <View style={styles.exerciseSetsWrapper}>
-        <View style={styles.exerciseSet}>
-          <Text style={styles.exerciseSetText}>1 подход</Text>
-          <Checkbox />
-        </View>
-        <View style={styles.exerciseSet}>
-          <Text style={styles.exerciseSetText}>2 подход</Text>
-          <Checkbox />
-        </View>
-        <View style={styles.exerciseSet}>
-          <Text style={styles.exerciseSetText}>3 подход</Text>
-          <Checkbox />
-        </View>
-      </View>
-
-      <CompleteButton navigation={navigation} buttonText="Завершить упражнение" />
+      <CompleteButton buttonText="Завершить упражнение" onPress={() => navigation.goBack()}/>
     </View>
   );
 }
@@ -55,18 +77,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
     paddingHorizontal: 20,
-    paddingTop: 10
+    paddingTop: 10,
   },
-  exerciseExample: theme.CARD_STYLE,
+  exerciseExample: {
+    width: "100%",
+    height: 220,
+    backgroundColor: 'white',
+    // backgroundColor: 'red',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    marginBottom: 20
+  },
 
   exerciseInfo: {
-    borderRadius: 10,
-    borderWidth: 1,
-    // borderColor: 'rgba(255, 255, 255, .5)',
     paddingHorizontal: 20,
-    // paddingVertical: 10,
-    paddingTop: 10,
-    marginTop: 10,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around'
@@ -118,11 +143,11 @@ const styles = StyleSheet.create({
   },
 
   gif: {
-    flex:1,
-    width:"100%",
-    height:"100%",
-    justifyContent:"center",
-    alignItems:"center",
-    backgroundColor:'#000',
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: '#000',
   }
 })

@@ -4,10 +4,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../theme';
 
-export const WorkoutCard = ({ onPress, cardName = "Back Workout" }) => {
+export const WorkoutCard = ({ onPress, cardName = "Back Workout", imgPath }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.workoutCardContainer} activeOpacity={theme.ACTIVE_OPACITY}>
-      <Image source={require("../../assets/imgs/manStrongBack.jpg")} style={styles.img}/>
+      <Image source={{uri: imgPath}} style={styles.img}/>
 
       <View style={styles.workoutCardButton}>
         <Text style={styles.workoutCardText}>{cardName}</Text>
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
   }
 })

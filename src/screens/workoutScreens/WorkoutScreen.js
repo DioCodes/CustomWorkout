@@ -1,35 +1,51 @@
 import React, { useLayoutEffect } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import theme from '../../theme';
+
 import { CompleteButton } from '../../components/CompleteButton';
 import { Checkbox } from '../../components/Checkbox';
+import { IMAGE_BUTT, MAN_STRONG_ONE, MAN_STRONG_TWO, MAN_STRONG_THREE } from '../../../assets/imgs/images';
+import { PUSH_UPS } from '../../../assets/gifs/gifs';
+import theme from '../../theme';
+import { ExerciseContainer } from '../../components/ExerciseContainer';
 
-export const WorkoutScreen = ({ navigation }) => {
+export const WorkoutScreen = ({ route, navigation }) => {
+  const {workoutTitle, exercises} = route.params;
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Тренировка на грудь",
+      headerTitle: workoutTitle,
     })
-  }, [])
+  }, []);
 
-  const ExerciseContainer = ({ onPress, exerciseName = "Empty Name" }) => {
+  const renderItem = ({ item }) => {
+    console.log(item.title)
     return (
-      <TouchableOpacity onPress={onPress} style={styles.exerciseContainer} activeOpacity={theme.ACTIVE_OPACITY}>
-        <Text style={styles.exerciseText}>{exerciseName}</Text>
-        <Checkbox color="black"/>
-      </TouchableOpacity>
+      <ExerciseContainer 
+        exerciseTitle={item.title} 
+        onPress={() => navigation.navigate("Exercise", {
+          exerciseTitle: item.title,
+          exerciseGifExample: item.gifExample,
+          exerciseSets: item.sets,
+          exerciseReps: item.reps,
+          exerciseRestInSec: item.restInSec
+        })} 
+      />
     );
   }
 
   return (
     <View style={styles.workoutContainer}>
       {/* Надо заставить работать скролл и используй FlatList */}
-      <View style={styles.workoutWrapper}>
-        <ExerciseContainer exerciseName="Отжимания" onPress={() => navigation.push("Exercise")}/>
-        <ExerciseContainer exerciseName="Узкие отжимания" onPress={() => navigation.push("Exercise")}/>
-      </View>
+      <FlatList
+        data={exercises}
+        renderItem={renderItem}
+        keyExtractor={(_, index) => {
+          return index.toString();
+        }}
+      />
 
-      <CompleteButton navigation={navigation} buttonText="Завершить тренировку" />
+      <CompleteButton buttonText="Завершить тренировку" onPress={() => navigation.goBack()}/>
     </View>
   );
 }
@@ -37,18 +53,12 @@ export const WorkoutScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   workoutContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#000',
     paddingHorizontal: 20,
     // alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: 10,
-    paddingBottom: 30
-  },
-
-  exerciseContainer: theme.CARD_STYLE,
-  exerciseText: {
-    fontSize: 18,
-    fontWeight: "bold"
+    // paddingBottom: 30
   },
 
   workoutDone: {
