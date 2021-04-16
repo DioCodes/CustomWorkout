@@ -15,7 +15,7 @@ import { CustomTextInput } from '../../components/CustomTextInput';
 import { ImageSelector } from '../../components/ImageSelector';
 
 import theme from '../../theme';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const CreateWorkoutScreen = ({ route, navigation }) => {
@@ -31,21 +31,19 @@ export const CreateWorkoutScreen = ({ route, navigation }) => {
     })
   }, [])
 
-  const removeImgFromStore = async () => {
-    try {
-      await AsyncStorage.removeItem('@storingImg');
-    } catch (e) {
-      console.log(e)
-    }
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      getImg();
+
+      return () => removeImgFromStore()
+    }, [])
+  );
   
   useEffect(() => {
-    if (isFocused == true) {
-      getImg();
-    } else {
-      removeImgFromStore()
+    if (route.params?.exercise) {
+      setExercises(prev => [...prev, route.params?.exercise])
     }
-  }, [isFocused]);
+  }, [route.params?.exercise]);
   
   const getImg = async () => {
     try {
@@ -54,30 +52,18 @@ export const CreateWorkoutScreen = ({ route, navigation }) => {
         setSelectedWorkoutImage(value);
       }
     } catch(e) {
-      console.log(e)
+      console.log(e);
+    }
+  };
+  
+  const removeImgFromStore = async () => {
+    try {
+      await AsyncStorage.removeItem('@storingImg');
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  // useEffect(() => {
-  //   if (route.params?.img) {
-  //     setSelectedWorkoutImage(route.params?.img)
-  //   }
-  //   console.log(route.params)
-  // }, [route.params?.img])
-  
-
-  useEffect(() => {
-    if (route.params?.exercise) {
-      // exercises.push(route.params?.exercise)
-      setExercises(prev => [...prev, route.params?.exercise])
-    }
-  }, [route.params?.exercise]);
-  
-  // title
-  // gif
-  // sets
-  // reps
-  // restInSec
 
   const dispatch = useDispatch();
 

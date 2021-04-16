@@ -5,7 +5,7 @@ import { gifsArray } from '../../../assets/gifsAndImgsArrays/gifsAndImgsArray';
 import { CustomTextInput } from '../../components/CustomTextInput';
 import { ImageSelector } from '../../components/ImageSelector';
 import { CompleteButton } from '../../components/CompleteButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Button';
 import { AppHeader } from '../../components/AppHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,6 +22,7 @@ export const CreateExerciseScreen = ({ route }) => {
   
   // console.log(exerciseTitle, selectedExerciseGif, currentSets, currentReps, currentSecs)
   const navigation = useNavigation();
+
   let exercise = {
     title: exerciseTitle,
     gifExample: selectedExerciseGif,
@@ -35,18 +36,16 @@ export const CreateExerciseScreen = ({ route }) => {
     navigation.setOptions({
       headerTitle: "Добавить упражнение"
     });
+    removeImgFromStore()
   }, []);
 
-  useEffect(() => {
-    if (route.params?.img) {
-      setSelectedExerciseGif(route.params?.img)
-    }
-    
-  }, [route.params?.img]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getImg();
 
-  useEffect(() => {
-    getImg();
-  }, []);
+      return () => removeImgFromStore()
+    }, [])
+  );
   
   const getImg = async () => {
     try {
@@ -55,11 +54,19 @@ export const CreateExerciseScreen = ({ route }) => {
         setSelectedExerciseGif(value);
       }
     } catch(e) {
-      console.log(e)
+      console.log(e);
     }
   };
   
-  const loadNums = (minNum, maxNum, everySec = 1) => {
+  const removeImgFromStore = async () => {
+    try {
+      await AsyncStorage.removeItem('@storingImg');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const loadPickerItems = (minNum, maxNum, everySec = 1) => {
     let n = [];
   
     for (let i = minNum; i <= maxNum; i += everySec) {
@@ -88,7 +95,7 @@ export const CreateExerciseScreen = ({ route }) => {
         {numsRange}
       </Picker>
     );
-  }
+  };
 
   return (
     <View style={styles.createExerciseContainer}>
@@ -106,15 +113,15 @@ export const CreateExerciseScreen = ({ route }) => {
 
       <View style={styles.createExerciseWrapper}>
         <View style={styles.createExerciseData}>
-          <RepeatedPicker value={currentSets} setValue={setCurrentSets} numsRange={loadNums(1, 5)}/>
+          <RepeatedPicker value={currentSets} setValue={setCurrentSets} numsRange={loadPickerItems(1, 5)}/>
           <Text style={styles.textDescription}>Подходы</Text>
         </View>
         <View style={styles.createExerciseData}>
-          <RepeatedPicker value={currentReps} setValue={setCurrentReps} numsRange={loadNums(1, 15)}/>
+          <RepeatedPicker value={currentReps} setValue={setCurrentReps} numsRange={loadPickerItems(1, 15)}/>
           <Text style={styles.textDescription}>Повторения</Text>
         </View>
         <View style={styles.createExerciseData}>
-          <RepeatedPicker value={currentSecs} setValue={setCurrentSecs} numsRange={loadNums(30, 120, 5)}/>
+          <RepeatedPicker value={currentSecs} setValue={setCurrentSecs} numsRange={loadPickerItems(30, 120, 5)}/>
           <Text style={styles.textDescription}>Отдых(сек)</Text>
         </View>
       </View>
