@@ -4,11 +4,11 @@ export default {
   BTN_PRIMARY: "rgba(255, 255, 255, .05)",
   TERTIARY_COLOR: "rgba(255, 255, 255, .05)",
   MODAL_BGC_COLOR: "#191B1E", // 0C0F14
-  ACTIVE_OPACITY: 0.9,
+  ACTIVE_OPACITY: 0.8,
   CONTAINER_HEADER: 18,
   CONTAINER_FONT_FAMILY: "norms-medium",
   CARD_STYLE: {
-    flex: 1,
+    // flex: 1,
     width: "100%",
     height: 60,
     flexDirection: 'row',

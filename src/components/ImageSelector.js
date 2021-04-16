@@ -23,7 +23,7 @@ export const ImageSelector = ({ images, selectedImage }) => {
 
       {
         !selectedImage ?
-        <Text style={styles.textDescription}>Выберите изображение карточки</Text> :
+        <Text style={styles.textDescription}> Выберите изображение карточки </Text> :
         null
       }
     </View>

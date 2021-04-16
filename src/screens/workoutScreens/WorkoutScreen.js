@@ -1,51 +1,96 @@
-import React, { useLayoutEffect } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { completeWorkout, deleteWorkout } from '../../store/actions/workoutsActions';
 
 import { CompleteButton } from '../../components/CompleteButton';
-import { Checkbox } from '../../components/Checkbox';
-import { IMAGE_BUTT, MAN_STRONG_ONE, MAN_STRONG_TWO, MAN_STRONG_THREE } from '../../../assets/imgs/images';
-import { PUSH_UPS } from '../../../assets/gifs/gifs';
-import theme from '../../theme';
 import { ExerciseContainer } from '../../components/ExerciseContainer';
+import { useIsFocused } from '@react-navigation/core';
+import { AppHeader } from '../../components/AppHeader';
 
 export const WorkoutScreen = ({ route, navigation }) => {
-  const {workoutTitle, exercises} = route.params;
+  const {workoutId, workoutIndex} = route.params;
+  let workout = useSelector((state) => state.workouts.workouts[workoutIndex]);
+
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+
+  const deleteThisWorkout = () => {
+    Alert.alert(
+      "Удаление",
+      "Вы действительно хотите удалить тренировку?",
+      [
+        {
+          text: "Отмена",
+          onPress: () => {},
+          style: "cancel",
+        },
+        { 
+          text: "Да", 
+          onPress: () => {
+            navigation.goBack();
+            dispatch(deleteWorkout(workoutId));
+          },
+          style: "destructive",
+        }
+      ],
+      { cancelable: false }
+    );
+  };
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: workoutTitle,
-    })
+    navigation.setOptions(
+      AppHeader(
+        workout.workoutTitle, 
+        'md-trash-outline', 
+        deleteThisWorkout, 
+        false
+      )
+    );
   }, []);
+  
+  const onCompletePress = () => {
+    dispatch(completeWorkout(workoutId));
+    navigation.goBack();
+  }
 
-  const renderItem = ({ item }) => {
-    console.log(item.title)
+  let renderItem = ({ item, index }) => {
     return (
       <ExerciseContainer 
         exerciseTitle={item.title} 
-        onPress={() => navigation.navigate("Exercise", {
-          exerciseTitle: item.title,
-          exerciseGifExample: item.gifExample,
-          exerciseSets: item.sets,
-          exerciseReps: item.reps,
-          exerciseRestInSec: item.restInSec
-        })} 
+        onPress={() => {
+          navigation.navigate("Exercise", {
+            exerciseTitle: item.title,
+            exerciseGifExample: item.gifExample,
+            exerciseSets: item.sets,
+            exerciseReps: item.reps,
+            exerciseRestInSec: item.restInSec,
+            workoutId: workoutId,
+            exerciseIndex: index.toString()
+          })
+        }}
+        isCompleted={item.isCompleted}
+        isCheckBoxDisabled={true}
       />
     );
   }
-
+  
   return (
     <View style={styles.workoutContainer}>
-      {/* Надо заставить работать скролл и используй FlatList */}
-      <FlatList
-        data={exercises}
-        renderItem={renderItem}
-        keyExtractor={(_, index) => {
-          return index.toString();
-        }}
+      { isFocused ?
+        // Единственный способ, что зарабаотал, чтобы обновить FlatList
+        <FlatList
+          data={workout.exercises}
+          renderItem={renderItem}
+          keyExtractor={(_, index) => index.toString()}
+        /> :
+        null
+      }
+        {/* null */}
+      <CompleteButton 
+        buttonText={'Завершить тренировку'} 
+        onPress={() => onCompletePress()}
       />
-
-      <CompleteButton buttonText="Завершить тренировку" onPress={() => navigation.goBack()}/>
     </View>
   );
 }

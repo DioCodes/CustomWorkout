@@ -4,9 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import theme from '../../theme';
 import { Checkbox } from '../../components/Checkbox';
 import { CompleteButton } from '../../components/CompleteButton';
+import { useDispatch } from 'react-redux';
+import { completeExercise } from '../../store/actions/workoutsActions';
 
 export const ExerciseScreen = ({ route, navigation }) => {
-  const { exerciseTitle, exerciseGifExample, exerciseSets, exerciseReps, exerciseRestInSec } = route.params;
+  const { exerciseTitle, exerciseGifExample, exerciseSets, exerciseReps, exerciseRestInSec, workoutId, exerciseIndex } = route.params;
   const [exerciseSetsCards, setExerciseSetsCards] = useState([]);
   
   useLayoutEffect(() => {
@@ -16,6 +18,8 @@ export const ExerciseScreen = ({ route, navigation }) => {
 
     createSets();
   }, [])
+
+  const dispatch = useDispatch();
   
   let sets = [];
   const createSets = () => {
@@ -23,6 +27,11 @@ export const ExerciseScreen = ({ route, navigation }) => {
       sets.push({setNumber: i})
     }
     setExerciseSetsCards(sets)
+  }
+
+  const onCompletePress = () => {
+    dispatch(completeExercise(workoutId, exerciseIndex));
+    navigation.goBack();
   }
 
   const ExerciseSetCard = ({ number }) => {
@@ -67,7 +76,7 @@ export const ExerciseScreen = ({ route, navigation }) => {
         }}
       />
 
-      <CompleteButton buttonText="Завершить упражнение" onPress={() => navigation.goBack()}/>
+      <CompleteButton buttonText="Завершить упражнение" onPress={() => onCompletePress()}/>
     </View>
   );
 }
@@ -148,6 +157,6 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
   }
 })

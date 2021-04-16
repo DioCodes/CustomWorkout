@@ -1,21 +1,32 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View, Image, FlatList, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { MAN_STRONG_ONE, MAN_STRONG_TWO, MAN_STRONG_THREE, IMAGE_BUTT } from '../../../assets/imgs/images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppHeader } from '../../components/AppHeader';
-import theme from '../../theme';
 
 export const WorkoutImagesListScreen = ({ route, navigation }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const { images } = route.params;
-  const previousScreenName = navigation.dangerouslyGetState().routes[navigation.dangerouslyGetState().routes.length-2].name;
 
   useLayoutEffect(() => {
     navigation.setOptions(
-      AppHeader("Выбор иллюстрации", 'checkmark', () => navigation.navigate(previousScreenName, { img: selectedImage})),
+      // можно убрать дёргание при выборе картинки -> не обновлять useLayoutEffect, а сделать это через useEffect и попробовать setNavigationOptions for the previousScreen
+      AppHeader("Выбор иллюстрации", 'checkmark', () => navigation.goBack()),
     );
+  }, [])
+
+  useEffect(() => {
+    storeImg(selectedImage)
   }, [selectedImage])
+
+  const storeImg = async (value) => {
+    try {
+      await AsyncStorage.setItem('@storingImg', value);
+    } catch (e) {
+      console.log(e)
+    }
+  };
 
   const ImageCard = ({ image }) => {
     return (
@@ -25,17 +36,16 @@ export const WorkoutImagesListScreen = ({ route, navigation }) => {
         onPress={() => setSelectedImage(image)}
       >
         <Image source={{uri: image}} style={styles.workoutImg}/> 
-        {
-          selectedImage == image ?
           <View style={styles.workoutImgSelected}>
-            <Ionicons
-              name="checkmark-circle-sharp" 
-              size={44} 
-              color="#000"
-            />
-          </View> :
-          null
-        }
+          {
+            selectedImage == image ?
+              <Ionicons
+                name="checkmark-circle-sharp" 
+                size={44} 
+                color="#000"
+              /> : null
+          }
+          </View>
       </TouchableOpacity>
     );
   }
@@ -82,11 +92,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   workoutImgSelected: {
-    width: '100%',
-    height: '100%',
-    // backgroundColor: "rgba(0, 0, 0, .25)",
     position: 'absolute',
-    alignItems: 'flex-end',
-    // justifyContent: 'flex-end',
+    top: 0,
+    right: 0,
   }
 })

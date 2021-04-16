@@ -1,4 +1,4 @@
-import { ADD_WORKOUT, DELETE_WORKOUT } from "../types";
+import { ADD_WORKOUT, COMPLETE_EXERCISE, COMPLETE_WORKOUT, DELETE_WORKOUT } from "../types";
 
 const INITIAL_STATE = {
   workouts: []
@@ -33,6 +33,7 @@ export const workoutsReducer = (state = INITIAL_STATE, action) => {
         workouts: [
           ...state.workouts,
           {
+            workoutId: action.workoutId,
             workoutTitle: action.workoutTitle,
             workoutImg: action.workoutImg,
             exercises: action.exercises
@@ -43,6 +44,7 @@ export const workoutsReducer = (state = INITIAL_STATE, action) => {
             //     sets: 3,
             //     reps: 15,
             //     restInSec: 120
+            //     isCompleted: true
             //   },
             //   {
             //     title: "Узкие отжимания",
@@ -50,6 +52,7 @@ export const workoutsReducer = (state = INITIAL_STATE, action) => {
             //     sets: 3,
             //     reps: 10,
             //     restInSec: 30
+            //     isCompleted: false
             //   }
             // ]
           }
@@ -58,8 +61,34 @@ export const workoutsReducer = (state = INITIAL_STATE, action) => {
     case DELETE_WORKOUT:
       return {
         ...state,
-        workouts: INITIAL_STATE.workouts
+        workouts: state.workouts.filter((workout) => {
+          return workout.workoutId !== action.workoutId
+        }),
       };
+    case COMPLETE_EXERCISE:
+      state.workouts.filter((workout) => {
+        Object.keys(workout.exercises).forEach((key) => {
+          if (workout.workoutId === action.exerciseWorkoutId && key === action.exerciseIndex) {
+            workout.exercises[key].isCompleted = true;
+          }
+        });
+      });
+      return {
+        ...state,
+        workouts: state.workouts
+      }
+    case COMPLETE_WORKOUT:
+      state.workouts.filter((workout) => {
+        Object.keys(workout.exercises).forEach((key) => {
+          if (workout.workoutId === action.workoutId) {
+            workout.exercises[key].isCompleted = false;
+          }
+        });
+      });
+      return {
+        ...state,
+        workouts: state.workouts
+      }
     default:
       return state 
   }

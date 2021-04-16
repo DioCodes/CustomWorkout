@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 
 import { imagesArray } from '../../../assets/gifsAndImgsArrays/gifsAndImgsArray';
+import { idGenerator } from '../../../assets/idGenerator';
 import { createWorkout } from '../../store/actions/workoutsActions';
 
 import { Button } from '../../components/Button';
@@ -14,33 +15,63 @@ import { CustomTextInput } from '../../components/CustomTextInput';
 import { ImageSelector } from '../../components/ImageSelector';
 
 import theme from '../../theme';
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const CreateWorkoutScreen = ({ route, navigation }) => {
   const [workoutTitle, setWorkoutTitle] = useState("");
   const [selectedWorkoutImage, setSelectedWorkoutImage] = useState(null);
   const [exercises, setExercises] = useState([]);
+
+  const isFocused = useIsFocused();
   
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Создание тренировки"
     })
-    console.log(exercises)
   }, [])
-  
-  // const exercises = [];
-  // console.log(route.params?.exercise)
-  useEffect(() => {
-    if (route.params?.img) {
-      setSelectedWorkoutImage(route.params?.img)
+
+  const removeImgFromStore = async () => {
+    try {
+      await AsyncStorage.removeItem('@storingImg');
+    } catch (e) {
+      console.log(e)
     }
-  }, [route.params?.img])
+  };
+  
+  useEffect(() => {
+    if (isFocused == true) {
+      getImg();
+    } else {
+      removeImgFromStore()
+    }
+  }, [isFocused]);
+  
+  const getImg = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storingImg');
+      if(value !== null) {
+        setSelectedWorkoutImage(value);
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  };
+
+  // useEffect(() => {
+  //   if (route.params?.img) {
+  //     setSelectedWorkoutImage(route.params?.img)
+  //   }
+  //   console.log(route.params)
+  // }, [route.params?.img])
+  
 
   useEffect(() => {
     if (route.params?.exercise) {
       // exercises.push(route.params?.exercise)
       setExercises(prev => [...prev, route.params?.exercise])
     }
-  }, [route.params?.exercise])
+  }, [route.params?.exercise]);
   
   // title
   // gif
@@ -51,7 +82,7 @@ export const CreateWorkoutScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const renderItem = ({ item }) => {
-    return <ExerciseContainer exerciseTitle={item.title} />
+    return <ExerciseContainer exerciseTitle={item.title}/>
   }
 
   return (
@@ -90,7 +121,7 @@ export const CreateWorkoutScreen = ({ route, navigation }) => {
       <CompleteButton 
         buttonText="Создать тренировку" 
         onPress={() => {
-          dispatch(createWorkout(workoutTitle, selectedWorkoutImage, exercises));
+          dispatch(createWorkout(idGenerator(), workoutTitle, selectedWorkoutImage, exercises));
           navigation.goBack();
         } }
         disabled={workoutTitle && selectedWorkoutImage ? false : true}

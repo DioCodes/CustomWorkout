@@ -8,6 +8,7 @@ import { CompleteButton } from '../../components/CompleteButton';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Button';
 import { AppHeader } from '../../components/AppHeader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const androidHeight = 50;
 const iosHeight = 150;
@@ -19,7 +20,7 @@ export const CreateExerciseScreen = ({ route }) => {
   const [currentReps, setCurrentReps] = useState(12);
   const [currentSecs, setCurrentSecs] = useState(90);
   
-  console.log(exerciseTitle, selectedExerciseGif, currentSets, currentReps, currentSecs)
+  // console.log(exerciseTitle, selectedExerciseGif, currentSets, currentReps, currentSecs)
   const navigation = useNavigation();
   let exercise = {
     title: exerciseTitle,
@@ -27,6 +28,7 @@ export const CreateExerciseScreen = ({ route }) => {
     sets: currentSets,
     reps: currentReps,
     restInSec: currentSecs,
+    isCompleted: false,
   };
   
   useLayoutEffect(() => {
@@ -35,13 +37,27 @@ export const CreateExerciseScreen = ({ route }) => {
     });
   }, []);
 
-  console.log(exercise)
   useEffect(() => {
     if (route.params?.img) {
       setSelectedExerciseGif(route.params?.img)
     }
     
   }, [route.params?.img]);
+
+  useEffect(() => {
+    getImg();
+  }, []);
+  
+  const getImg = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storingImg');
+      if(value !== null) {
+        setSelectedExerciseGif(value);
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  };
   
   const loadNums = (minNum, maxNum, everySec = 1) => {
     let n = [];
