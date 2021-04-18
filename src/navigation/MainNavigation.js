@@ -12,6 +12,7 @@ import { ExerciseScreen } from '../screens/workoutScreens/ExerciseScreen';
 import { CreateWorkoutScreen } from '../screens/createWorkoutScreens/CreateWorkoutScreen';
 import { WorkoutImagesListScreen } from '../screens/createWorkoutScreens/WorkoutImagesListScreen';
 import { CreateExerciseScreen } from '../screens/createWorkoutScreens/CreateExerciseScreen';
+import { WelcomeScreen } from '../screens/WelcomeScreen';
 
 export const MainNavigation = () => {
   const Stack = createStackNavigator();
@@ -44,14 +45,16 @@ export const MainNavigation = () => {
           },
           cardStyle: {
             // marginTop: 10,
-            backgroundColor: "rgb(255, 255, 255)"
+            backgroundColor: "#000000"
           },
 
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           ...TransitionPresets.SlideFromRightIOS,
         }}
         headerMode="screen"
+        initialRouteName="Welcome"
       >
+        <Stack.Screen name="Welcome" component={WelcomeScreen}/>
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="CreateWorkout" component={CreateWorkoutScreen}/>
         <Stack.Screen name="CreateExercise" component={CreateExerciseScreen} />

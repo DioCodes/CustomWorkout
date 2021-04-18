@@ -20,6 +20,26 @@ export default {
     paddingHorizontal: 15,
     marginBottom: 10
   },
+  DESCRIPTION_TEXT: {
+    color: "rgba(255, 255, 255, .5)",
+    fontFamily: 'norms-regular',
+    fontSize: 14,
+  },
+  NORMAL_TEXT: {
+    fontSize: 18,
+    color: "#fff",
+    fontFamily: 'norms-regular',
+  },
+  BUTTON_TEXT: {
+    color: "#fff",
+    fontFamily: 'norms-medium',
+    fontSize: 18,
+  },
+  HEADER_TEXT: {
+    color: "#fff",
+    fontFamily: 'norms-bold',
+    fontSize: 20
+  },
   /////////////////////////////////
   QUATERNARY_COLOR: "#c",
   FIFTERNARY_COLOR: "#FF1744",

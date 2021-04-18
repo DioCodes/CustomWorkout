@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   imgSelectorWrapper: {
     height: 190,
     backgroundColor: '#fff',
-    borderRadius: 15,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 5,
@@ -52,8 +52,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
 
-  textDescription: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, .5)"
-  }
+  textDescription: theme.DESCRIPTION_TEXT
 })

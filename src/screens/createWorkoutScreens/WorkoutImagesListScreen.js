@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   workoutImgCard: {
     height: 190,
     backgroundColor: '#fff',
-    borderRadius: 15,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10

@@ -65,9 +65,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  header: {
-    // fontFamily: 'norms-medium',
-    fontSize: 16,
-    color: "#fff"
-  },
+  header: theme.BUTTON_TEXT
 });

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import theme from '../theme';
 import { useDispatch } from 'react-redux';
 
-export const CompleteButton = ({ buttonText, onPress = () => {}, disabled = false }) => {
+export const CompleteButton = ({ buttonText, onPress = () => {}, disabled = false, isBorder = true, isWhite = false }) => {
   const navigation = useNavigation();
 
   const onPressButtonHandler = () => {
@@ -19,12 +19,11 @@ export const CompleteButton = ({ buttonText, onPress = () => {}, disabled = fals
     >
       <View style={{
         width: '100%',
-        // backgroundColor: 'red',
         borderTopColor: 'rgba(255, 255, 255, .15)',
-        borderTopWidth: 1,
+        borderTopWidth: isBorder ? 1 : 0,
       }}>
-        <View style={styles.completeButtonWrapper}>
-          <Text style={styles.completeButtonText}>{buttonText}</Text>
+        <View style={{...styles.completeButtonWrapper, backgroundColor: isWhite ? '#fff' : '#000'}}>
+          <Text style={[styles.completeButtonText, {color: isWhite ? '#000' : '#fff'}]}>{buttonText}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -36,19 +35,14 @@ const styles = StyleSheet.create({
     marginHorizontal: -20,
   },
   completeButtonWrapper: {
-    backgroundColor: '#000',
     alignItems: 'center',
     borderColor: "#fff",
-    borderWidth: 1.5,
     borderRadius: 5,
+    borderWidth: 1,
     paddingVertical: 15,
     marginTop: 15,
     marginBottom: 30,
-    marginHorizontal: 15
+    marginHorizontal: 15,
   },
-  completeButtonText: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: 'bold'
-  },
+  completeButtonText: theme.BUTTON_TEXT
 })

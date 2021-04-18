@@ -139,13 +139,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  workoutExercisesHeader: {
-    color: "#fff",
-    fontSize: 20
-  },
+  workoutExercisesHeader: theme.HEADER_TEXT,
 
-  textDescription: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, .5)"
-  }
+  textDescription: theme.DESCRIPTION_TEXT
 })

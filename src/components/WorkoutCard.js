@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'red',
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 10,
     marginBottom: 10,
   },
   workoutCardButton: {
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   workoutCardText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'norms-bold',
   },
 
   img: {

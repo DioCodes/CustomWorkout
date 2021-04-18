@@ -26,7 +26,7 @@ export const WorkoutScreen = ({ route, navigation }) => {
           style: "cancel",
         },
         { 
-          text: "Да", 
+          text: "Удалить", 
           onPress: () => {
             navigation.goBack();
             dispatch(deleteWorkout(workoutId));
@@ -84,9 +84,8 @@ export const WorkoutScreen = ({ route, navigation }) => {
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
         /> :
-        null
+        <View />
       }
-        {/* null */}
       <CompleteButton 
         buttonText={'Завершить тренировку'} 
         onPress={() => onCompletePress()}
@@ -100,25 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     paddingHorizontal: 20,
-    // alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: 10,
-    // paddingBottom: 30
   },
-
-  workoutDone: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'white',
-    borderRadius: 5,
-    borderColor: 'white',
-    borderWidth: 1,
-    paddingVertical: 15,
-  },
-  workoutDoneText: {
-    fontSize: 18,
-    color: "white",
-    fontWeight: 'bold'
-  }
 })

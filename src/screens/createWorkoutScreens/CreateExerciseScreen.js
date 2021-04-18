@@ -6,9 +6,9 @@ import { CustomTextInput } from '../../components/CustomTextInput';
 import { ImageSelector } from '../../components/ImageSelector';
 import { CompleteButton } from '../../components/CompleteButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Button } from '../../components/Button';
 import { AppHeader } from '../../components/AppHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import theme from '../../theme';
 
 const androidHeight = 50;
 const iosHeight = 150;
@@ -159,8 +159,5 @@ const styles = StyleSheet.create({
     width: "100%",
     color: '#fff',
   },
-  textDescription: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, .25)"
-  }
+  textDescription: theme.DESCRIPTION_TEXT
 })
