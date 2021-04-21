@@ -111,13 +111,10 @@ const styles = StyleSheet.create({
   },
   exerciseInfoNum: {
     fontSize: 24,
-    color: "white"
+    color: "#fff",
+    fontFamily: 'norms-medium'
   },
-  exerciseInfoText: {
-    fontSize: 12,
-    color: "white",
-    opacity: .5
-  },
+  exerciseInfoText: theme.DESCRIPTION_TEXT,
 
   exerciseSetsWrapper: {
     // backgroundColor: 'blue',
@@ -132,10 +129,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'grey',
     marginVertical: 10
   },
-  exerciseSetText: {
-    fontSize: 18,
-    color: "white"
-  },
+  exerciseSetText: theme.NORMAL_TEXT,
 
   exerciseDone: {
     width: '100%',

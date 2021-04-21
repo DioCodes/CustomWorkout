@@ -28,8 +28,5 @@ export const ExerciseContainer = ({ onPress, exerciseTitle = "Empty Name", isCom
 
 const styles = StyleSheet.create({
   exerciseContainer: theme.CARD_STYLE,
-  exerciseText: {
-    fontSize: 18,
-    fontWeight: "bold"
-  },
+  exerciseText: theme.BUTTON_TEXT
 })

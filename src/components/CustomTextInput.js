@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   customTextInput: {
-    // fontFamily: "norms-medium",
+    fontFamily: "norms-regular",
     color: "#fff",
     fontSize: 20,
   }
